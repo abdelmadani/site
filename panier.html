@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier - STS CIEL IR</title>
+    <link rel="stylesheet" href="site1.css">
+</head>
+<body>
+    <header>
+        <h1>Panier</h1>
+    </header>
+    <main>
+        <section id="cart-items">
+            <!-- Contenu du panier sera ajouté ici par JavaScript -->
+        </section>
+        <a href="page_saisie.html"><button>Payer</button></a> <!-- Bouton pour payer -->
+    </main>
+    <footer>
+        <p>&copy; STS CIEL IR 2024</p>
+    </footer>
+    
+    <script>
+        // Récupérer le contenu du panier et l'afficher
+        var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+
+        var cartItemsSection = document.getElementById("cart-items");
+
+        if (cartItems && cartItems.length > 0) {
+            cartItems.forEach(function(item) {
+                var cartItemDiv = document.createElement("div");
+                cartItemDiv.classList.add("cart-item");
+
+                var productImage = document.createElement("img");
+                productImage.src = item.imageSrc;
+                productImage.alt = item.name;
+                cartItemDiv.appendChild(productImage);
+
+                var productName = document.createElement("h3");
+                productName.innerText = item.name;
+                cartItemDiv.appendChild(productName);
+
+                var productPrice = document.createElement("p");
+                productPrice.innerText = "Prix : " + item.price + " €";
+                cartItemDiv.appendChild(productPrice);
+
+                // Ajouter un champ pour la quantité
+                var quantityLabel = document.createElement("label");
+                quantityLabel.innerText = "Quantité :";
+                var quantityInput = document.createElement("input");
+                quantityInput.type = "number";
+                quantityInput.value = item.quantity || 1; // Valeur par défaut
+                quantityInput.min = 1; // Quantité minimale
+                quantityInput.addEventListener("change", function() {
+                    updateQuantity(item, this.value);
+                });
+                var quantityButtons = document.createElement("div");
+                var plusButton = document.createElement("button");
+                plusButton.innerText = "+";
+                plusButton.addEventListener("click", function() {
+                    quantityInput.value++;
+                    updateQuantity(item, quantityInput.value);
+                });
+                var minusButton = document.createElement("button");
+                minusButton.innerText = "-";
+                minusButton.addEventListener("click", function() {
+                    if (quantityInput.value > 1) {
+                        quantityInput.value--;
+                        updateQuantity(item, quantityInput.value);
+                    }
+                });
+                quantityButtons.appendChild(minusButton);
+                quantityButtons.appendChild(plusButton);
+                cartItemDiv.appendChild(quantityLabel);
+                cartItemDiv.appendChild(quantityInput);
+                cartItemDiv.appendChild(quantityButtons);
+
+                // Ajouter un bouton de suppression
+                var removeButton = document.createElement("button");
+                removeButton.innerText = "Supprimer";
+                removeButton.addEventListener("click", function() {
+                    removeItem(item);
+                });
+                cartItemDiv.appendChild(removeButton);
+
+                cartItemsSection.appendChild(cartItemDiv);
+            });
+        } else {
+            cartItemsSection.innerHTML = "<p>Votre panier est vide.</p>";
+        }
+
+        // Fonction pour mettre à jour la quantité d'un produit dans le panier
+        function updateQuantity(item, newQuantity) {
+            var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+            for (var i = 0; i < cartItems.length; i++) {
+                if (cartItems[i].name === item.name) {
+                    cartItems[i].quantity = parseInt(newQuantity);
+                    break;
+                }
+            }
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        }
+
+        // Fonction pour supprimer un article du panier
+        function removeItem(item) {
+            var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+            cartItems = cartItems.filter(function(cartItem) {
+                return cartItem.name !== item.name;
+            });
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            location.reload(); // Recharger la page pour mettre à jour le contenu du panier
+        }
+    </script>
+	   <script>
+        // Fonction pour vider le panier
+        function viderPanier() {
+            localStorage.removeItem("cartItems"); // Supprimer les données du panier du stockage local
+            location.reload(); // Recharger la page pour mettre à jour le contenu du panier
+        }
+    </script>
+	
+</body>
+</body>
+</html>
