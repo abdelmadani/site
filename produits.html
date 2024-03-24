@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - STS CIEL IR</title>
+    <link rel="stylesheet" href="site1.css">
+<script>
+function ajouterAuPanier(idProduit) {
+    // Récupérer les détails du produit
+    var produit = document.getElementById(idProduit);
+    var nomProduit = produit.querySelector('h3').innerText;
+    var prixProduit = produit.querySelector('p').innerText.split(':')[1].trim(); // Extraction du prix
+    var imageProduit = produit.querySelector('img').src; // Chemin de l'image du produit
+    
+    // Créer un objet représentant le produit
+    var produitAjoute = {
+        nom: nomProduit,
+        prix: prixProduit,
+        imageSrc: imageProduit // Ajout du chemin de l'image
+    };
+    
+    // Récupérer le panier depuis le stockage local ou initialiser un nouveau panier
+    var panier = JSON.parse(localStorage.getItem("cartItems")) || [];
+    
+    // Ajouter le produit au panier
+    panier.push(produitAjoute);
+    
+    // Mettre à jour le panier dans le stockage local
+    localStorage.setItem("cartItems", JSON.stringify(panier));
+    
+    // Actualiser l'affichage du panier
+    afficherPanier();
+}
+</script>
+
+
+</head>
+<body>
+    <header>
+        <h1>STS CIEL IR - Produits Informatiques</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#produits">Produits</a></li>
+            <li><a href="#produit-detail">Détail Produit</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#connexion">Connexion</a></li>
+            <li><a href="#panier">Panier</a></li> <!-- Lien vers la page du panier -->
+        </ul>
+    </nav>
+    <main>
+        <section id="accueil">
+            <h2>Bienvenue sur STS CIEL IR</h2>
+            <p>Entrez dès maintenant dans l'univers de l'informatique.</p>
+        </section>
+        <section id="produits">
+            <h2>Nos produits</h2>
+            <div class="product" id="produit1">
+                <img src="C:\Users\ABDEL\Desktop\site\71Eb5xw9Z2L.__AC_SY300_SX300_QL70_ML2_.jpg" alt="Produit 1">
+                <h3>Ordinateur Portable</h3>
+                <p>Description du produit. Prix : 999 €</p>
+                <button onclick="ajouterAuPanier('produit1')">Acheter</button>
+            </div>
+            <div class="product" id="produit2">
+                <img src="C:\Users\ABDEL\Desktop\site\7176Ht-T7QL.__AC_SX300_SY300_QL70_ML2_.jpg" alt="Produit 2">
+                <h3>Imprimante Multifonction</h3>
+                <p> Description du produit. Prix : 199 €</p>
+                <button onclick="ajouterAuPanier('produit2')">Acheter</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; STS CIEL IR 2024</p>
+    </footer>
+</body>
+</html>
